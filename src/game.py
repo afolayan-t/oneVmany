@@ -1,12 +1,18 @@
 import numpy as np
 import random
+<<<<<<< HEAD
 from player_classes.py import *
+=======
+import * from player_classes
+>>>>>>> origin
 
 class dbd:
     """Defines state of game"""
+   
     def __init__(self, killer, survivors):
         self.num_games_run = 0
-        self.gen_set = list(np.zeros((7,3))) # 0 if not fixed, 1 if fixed, and player_object if being worked on
+        self.gen_set = list(np.zeros((7,3))) # 0 if not in use, 1 if fixed, player_object if being worked on
+        self.gen_vals = list(np.zeros((7))) # 0 if not fixed, 3 if fixed
         self.door_set = list(np.zeros((2,1))) # doors that can be opened once 5 generators are fixed
         self.hook_set = list(np.zeros((4,2))) # 1 spot for hooked survivor, 1 spot for camping killer
         self.trap_door_open = False 
@@ -19,6 +25,7 @@ class dbd:
         self.survivors_alive = 4
         self.gens_fixed = 0
 
+#------------------------------------------------------------
 
     
     def __repr__(self):
@@ -26,18 +33,45 @@ class dbd:
         print("Survivors Alive: " + self.survivors_alive)
         print("Generators Fixed: " + self.gens_fixed)
 
+#------------------------------------------------------------
 
 
-    def fix_generator(self, choice):
+    def fix_generator(self, player, choice):
         """accepts generator pick from survivor"""
-        pass
+        if player not in self.gen_set[choice,:]:
+            pos = self.gen_set[choice,:].index(0)
+            self.gen_set[choice][pos] = player
+        
+        self.gen_vals[choice] += 1
+
+        if self.gen_vals[choice] == 3:
+            pos = self.gen_set[choice,:].index(0)
+            self.gen_set[choice][pos] = 1
+            self.gens_fixed += 1
+            
+
+
+#------------------------------------------------------------
+
 
     def open_door(self, choice):
         pass
 
-    def hooked(self, players):
-        pass
+#------------------------------------------------------------
 
+    def hooked(self, players):
+        pos = self.hook_set[:,0].index(players[1])
+        killerCamping =  (self.hook_set[pos][1] != 0)
+        
+        decision = players[0].strategicMove("Save")
+        if not killerCamping or decision == "Rescue":
+            self.hook_set[pos][0] = 0
+            self.free_survivors.append(players[1])
+        else: return
+
+        return self.chase(players)
+
+#------------------------------------------------------------
 
     def chase(self, players):
 
@@ -60,16 +94,20 @@ class dbd:
                 if not chasedPlayer.is_injured: # First hit -> continue chase
                     chasedPlayer.is_injured = True
                 else: 
-                    self.hook_set[random.randint(0,3)][0] = chasedPlayer
+                    ## TODO: if hooked 3 times, kill player
+
+
+                    i = random.randint(0,3)
+                    self.hook_set[i][0] = chasedPlayer
                     self.free_survivors.remove(chasedPlayer)
                     chasedPlayer.hooks += 1
                     camping = np.random.binomial(1, 0.5)
                     if camping: 
-                        self.hook_set[random.randint(0,3)][1] = self.killer
+                        self.hook_set[i][1] = self.killer
                         self.killer.busy = True
                     return
 
-
+#------------------------------------------------------------
 
 
     def run_round(self):
@@ -84,11 +122,12 @@ class dbd:
             if scenario[0] == "Hooked":
                 self.hooked(scenario[1])
             if scenario[0] == "Fix Gen":
-                self.fix_generator(scenario[1])
+                self.fix_generator(scenario[1], scenario[2])
             if scenario[0] == "Door":
                 self.open_door(scenario[1])
         return
             
+#------------------------------------------------------------
 
 
     def play(self):
@@ -98,9 +137,14 @@ class dbd:
             return payoff([])
 
 
+#------------------------------------------------------------
+
+
     def payoff(self, Outcome):
         ''' Takes list of survivors alive and rewards everyone accordingly '''
-        
+
+#------------------------------------------------------------
+
 
     def store_data():
         pass

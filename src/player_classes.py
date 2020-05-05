@@ -36,6 +36,8 @@ class survivor:
     def strategicMove(self, situation):
         if situation == "Chased":
             return np.random.choice(["Run", "Obstacle", "Stun"],1, [1/3, 1/3, 1/3])[0]
+        if situation == "Save":
+            return np.random.choice(["Rescue", "Leave"],1, [1/2, 1/2])[0]
 
 
 
