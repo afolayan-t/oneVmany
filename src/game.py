@@ -7,7 +7,8 @@ class dbd:
    
     def __init__(self, killer, survivors):
         self.num_games_run = 0
-        self.gen_set = list(np.zeros((7,3))) # 0 if not fixed, 1 if fixed, and player_object if being worked on
+        self.gen_set = list(np.zeros((7,3))) # 0 if not in use, 1 if fixed, player_object if being worked on
+        self.gen_vals = list(np.zeros((7))) # 0 if not fixed, 3 if fixed
         self.door_set = list(np.zeros((2,1))) # doors that can be opened once 5 generators are fixed
         self.hook_set = list(np.zeros((4,2))) # 1 spot for hooked survivor, 1 spot for camping killer
         self.trap_door_open = False 
@@ -31,9 +32,20 @@ class dbd:
 #------------------------------------------------------------
 
 
-    def fix_generator(self, choice):
+    def fix_generator(self, player, choice):
         """accepts generator pick from survivor"""
-        pass
+        if player not in self.gen_set[choice,:]:
+            pos = self.gen_set[choice,:].index(0)
+            self.gen_set[choice][pos] = player
+        
+        self.gen_vals[choice] += 1
+
+        if self.gen_vals[choice] == 3:
+            pos = self.gen_set[choice,:].index(0)
+            self.gen_set[choice][pos] = 1
+            self.gens_fixed += 1
+            
+
 
 #------------------------------------------------------------
 
@@ -106,7 +118,7 @@ class dbd:
             if scenario[0] == "Hooked":
                 self.hooked(scenario[1])
             if scenario[0] == "Fix Gen":
-                self.fix_generator(scenario[1])
+                self.fix_generator(scenario[1], scenario[2])
             if scenario[0] == "Door":
                 self.open_door(scenario[1])
         return
