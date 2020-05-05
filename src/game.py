@@ -38,6 +38,7 @@ class dbd:
                  [0.8, 0.7]]
 
         num_chased = len(players) - 1
+        playerChoice = players[0].
 
 
     def run_round(self):

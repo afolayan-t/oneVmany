@@ -32,6 +32,11 @@ class survivor:
 
         pass
 
+    def strategicMove(situation):
+        if situation == "Chased":
+            return random.choices(["Run", "Obstacle", "Stun"], [1/3, 1/3, 1/3])
+
+
     def request_help(self):
         """requests help from a particular survivor"""
         
@@ -43,13 +48,13 @@ class survivor:
     def open_door(choice):
 
 
-    def pick_gen(self, gen_set):
-        num_avail_gens = len(gen_set)
-        choice = random.(range(num_avail_gens))
-        return choice
+    #def pick_gen(self, gen_set):
+     #   num_avail_gens = len(gen_set)
+      #  choice = random.int(0, num_avail_gens)
+       # return choice
 
-    def help(self, survivor):
-        """Helps survivor by unhooking or healing them"""
+   # def help(self, survivor):
+    #    """Helps survivor by unhooking or healing them"""
 
 
     def nextMove(self, game, gen_set, hook_set, door_set, is_chase = False, is_hooked = False):
@@ -82,14 +87,6 @@ class survivor:
             
 
 
-
-
-
-                
-
-
-
-
 class killer:
 
     def __init__(killer_strategy):
@@ -102,3 +99,7 @@ class killer:
         """once a set of survivors have been discovered, picks a survivor to chase from set"""
 
     def nextMove(self, gen_set, hook_set, survivors, is_chase = False):
+
+
+p1 = survivor("hello", "regular")
+p1.strategicMove()
