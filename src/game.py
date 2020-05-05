@@ -1,6 +1,6 @@
 import numpy as np
 import random
-import player_classes
+from player_classes.py import *
 
 class dbd:
     """Defines state of game"""

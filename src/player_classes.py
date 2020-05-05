@@ -52,6 +52,7 @@ class survivor:
     def help(self, survivor):
         """Helps survivor by unhooking or healing them"""
 
+
     def nextMove(self, game, gen_set, hook_set, door_set, is_chase = False, is_hooked = False):
         """Chooses whether to pick a generator to work on, or go and help a teammate"""
         help_p = self.help_p
@@ -63,22 +64,21 @@ class survivor:
             help_decision = np.random.binomial(1,help_p)
             if help_decision == 1: #agrees to help
                 #pick survivor to help
-                hooked_survivors = [survivor for survivor in hooks if survivor != 0]
+                hooked_survivors = [survivor for survivor in hook_set[:,0] if survivor != 0]
                 surv_choice = random.choice(hooked_survivors)
-                self.help(surv_choice)
-                return
+                return ("Hooked", [self, surv_choice[0]])
         #pick generator
-        if game.gens_fixed < 5
+        if game.gens_fixed <= 5:
             available_gens = [gen for gen in gen_set if 0 in gen] # gives list of generators with available spot
-            game.fix(self.pick_gen)
-            return
+            
+            return ("Fix Gen", self, self.pick_gen(game.gen_set))
         else:
             # open door
             if all(d==0 for d in door_set):
                 door_choice = random.choice(door_set)
-                game.open_door(door_choice)
+                return ("Door", self)
             else:# door is already being opened, nothing else to do
-                return
+                return ("Hide", self)
             
 
 
@@ -87,11 +87,26 @@ class killer:
     def __init__(killer_strategy):
         """Defines Killer"""
         self.busy = False
+        self.camp_p = .5
 
     def check_gen(self, gen_set):
         """"""
+        choice = np.random.choice(range(0,len(gen_set)))
+        return
 
     def pick_survivor(self, survivors_discovered):
         """once a set of survivors have been discovered, picks a survivor to chase from set"""
 
-    def nextMove(self, gen_set, hook_set, survivors, is_chase = False):
+
+    def nextMove(self, game):
+        """takes in game opject"""
+        gen_set = game.gen_set
+        if self.busy == True:
+            return "Nothing", self)
+        else:
+            #check generator
+            choice = self.check_gen(gen_set)
+            picked_gen = gen_set[choice,:]
+            found_survivors = [surv for surv in picked_gen if surv != 0]
+            
+
