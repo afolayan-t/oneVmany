@@ -7,19 +7,20 @@ import random
 #adding items medkit(1-self heal), toolbox, 
 class survivor:
     num_survivors = 0
-    def __init__(player_name, player_strategy):
+    def __init__(self, player_name, player_strategy):
         """Defines Survivor strategy; selfless, selfish, trust, random, & adaptive*"""
-        self.survivor_num = num_survivors + 1
+        #self.survivor_num = num_survivors + 1
         self.player_strategy = player_strategy
         self.is_injured = False #defines if you hav been injured
         self.gens_completed = 0
         self.score = 0
+        self.hooks = 0
         
         if player_strategy == "regular":
             self.help_p = .5 #probability to help
             self.soloist = True #defines whether agent prefers to be alone or not
 
-        num_survivors += 1
+        #num_survivors += 1
             
 
     def __repr__(self):
@@ -32,9 +33,10 @@ class survivor:
 
         pass
 
-    def strategicMove(situation):
+    def strategicMove(self, situation):
         if situation == "Chased":
-            return random.choices(["Run", "Obstacle", "Stun"], [1/3, 1/3, 1/3])
+            return np.random.choice(["Run", "Obstacle", "Stun"],1, [1/3, 1/3, 1/3])[0]
+
 
 
     def request_help(self):
@@ -42,20 +44,13 @@ class survivor:
         
         pass
 
-    def fix_generator(choice):
-        """accepts generator pick from survivor"""
+    def pick_gen(self, gen_set):
+        num_avail_gens = len(gen_set)
+        choice = random.int(0, num_avail_gens)
+        return choice
 
-    def open_door(choice):
-
-
-    #def pick_gen(self, gen_set):
-     #   num_avail_gens = len(gen_set)
-      #  choice = random.int(0, num_avail_gens)
-       # return choice
-
-   # def help(self, survivor):
-    #    """Helps survivor by unhooking or healing them"""
-
+    def help(self, survivor):
+        """Helps survivor by unhooking or healing them"""
 
     def nextMove(self, game, gen_set, hook_set, door_set, is_chase = False, is_hooked = False):
         """Chooses whether to pick a generator to work on, or go and help a teammate"""
@@ -91,6 +86,7 @@ class killer:
 
     def __init__(killer_strategy):
         """Defines Killer"""
+        self.busy = False
 
     def check_gen(self, gen_set):
         """"""
@@ -99,7 +95,3 @@ class killer:
         """once a set of survivors have been discovered, picks a survivor to chase from set"""
 
     def nextMove(self, gen_set, hook_set, survivors, is_chase = False):
-
-
-p1 = survivor("hello", "regular")
-p1.strategicMove()
