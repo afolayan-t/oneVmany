@@ -34,8 +34,14 @@ class survivor:
 
     def request_help(self):
         """requests help from a particular survivor"""
-
+        
         pass
+
+    def fix_generator(choice):
+        """accepts generator pick from survivor"""
+
+    def open_door(choice):
+
 
     def pick_gen(self, gen_set):
         num_avail_gens = len(gen_set)
@@ -46,7 +52,7 @@ class survivor:
         """Helps survivor by unhooking or healing them"""
 
 
-    def take_action(self, game, gen_set, hook_set, door_set, is_chase = False, is_hooked = False):
+    def nextMove(self, game, gen_set, hook_set, door_set, is_chase = False, is_hooked = False):
         """Chooses whether to pick a generator to work on, or go and help a teammate"""
         help_p = self.help_p
 
@@ -95,4 +101,4 @@ class killer:
     def pick_survivor(self, survivors_discovered):
         """once a set of survivors have been discovered, picks a survivor to chase from set"""
 
-    def take_action(self, gen_set, hook_set, survivors, is_chase = False):
+    def nextMove(self, gen_set, hook_set, survivors, is_chase = False):
