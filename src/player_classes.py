@@ -66,8 +66,8 @@ class survivor:
         """requests help from a particular survivor"""
 
         for survivor in random.shuffle(game.free_survivors):
-            x = survivor.strategicMove("Help")
-            if x == "Heal":
+            move = survivor.strategicMove("Help")
+            if move == "Heal":
                 self.is_injured == False
                 survivor.score += 10
                 return
@@ -75,8 +75,7 @@ class survivor:
 
 
     def pick_gen(self, gen_set):
-        num_avail_gens = len(gen_set)
-        choice = random.randint(0, num_avail_gens)
+        choice = random.choice(gen_set)
         return choice
 
 
@@ -88,15 +87,15 @@ class survivor:
             if self.is_injured == False:
                 return ("Hide", self)
         if all(s==0 for s in game.hook_set) !=True: # not empty
-            help_decision = np.random.binomial(1,self.help_p)
+            help_decision = np.random.binomial(1, help_p)
             if help_decision == 1: #agrees to help
                 #pick survivor to help
-                hooked_survivors = [survivor for survivor in game.hook_set[:,0] if survivor != 0]
+                hooked_survivors = [survivor for survivor in game.hook_set[:,0] if survivor != 0 and survivor != 1]
                 surv_choice = random.choice(hooked_survivors)
-                return ("Hooked", [self, surv_choice[0]])
+                return ("Hooked", [self, surv_choice])
         #pick generator
         if game.gens_fixed < 5:
-            available_gens = [gen for gen in game.gen_set if 0 in gen] # gives list of generators with available spot
+            available_gens = [i for i in range(7) if 0 in game.gen_set[i,:]] # gives list of generators with available spot
             return ("Fix Gen", self, self.pick_gen(available_gens))
         else:# nothing left to do
             return ("Hide", self)
@@ -130,7 +129,7 @@ class killer:
                 if len(found_survivors) == 1:
                     return ("Chase", found_survivors)
                 else:
-                    return ("Chase", found_survivors[:2])
+                    return ("Chase", found_survivors[:-1])
 
         for survivor in random.shuffle(game.free_survivor):
             search = np.random.binomial(1,survivor.r)
