@@ -70,8 +70,7 @@ class survivor:
             x = survivor.strategicMove("Help")
             if x == "Heal":
                 self.is_injured == False
-                return
-            else:
+                survivor.score += 10
                 return
 
 
@@ -101,10 +100,7 @@ class survivor:
             available_gens = [gen for gen in game.gen_set if 0 in gen] # gives list of generators with available spot
             return ("Fix Gen", self, self.pick_gen(available_gens))
         else:# nothing left to do
-            if game.gens_fixed < 5 & game.survivors_alive == 1:
-                return("Trapdoor", self) #search for Trapdoor
-            else:
-                return ("Hide", self)
+            return ("Hide", self)
             
 
 

@@ -32,6 +32,9 @@ class dbd:
 
     def lookForTrapDoor(self, player):
         Found = np.random.binomial(1, 0.1)
+        if Found:
+            player.score += 50
+        player.r = min(.9,player.r+.1)
         return (Found == 1)
 
 #------------------------------------------------------------
@@ -50,14 +53,18 @@ class dbd:
             if popGenerator:
                 decision = player.strategicMove("Pop")
                 workOnGenerator = (decision == "Continue")
+                if workOnGenerator:
+                    player.r = min(.9,player.r+.3)
 
         if workOnGenerator:
             self.gen_vals[choice] += 1
 
         if self.gen_vals[choice] == 3:
-            pos = self.gen_set[choice,:].index(0)
-            self.gen_set[choice][pos] = 1
             self.gens_fixed += 1
+            for i in range(len(self.gen_set[choice,:])):
+                 self.gen_set[choice][i] = 1
+                if p[i]!=0:
+                    p.score+=10
             
 
 #------------------------------------------------------------
@@ -70,6 +77,8 @@ class dbd:
         if not killerCamping or decision == "Rescue":
             self.hook_set[pos][0] = 0
             self.free_survivors.append(players[1])
+            players[0].score += 25
+            players[0].r = min(.9, players[0].r + .3)
         else: return
 
         return self.chase(players)
@@ -94,16 +103,17 @@ class dbd:
                 probs = probs_2
             while(True):    
                 
-                playerStrat = chasedPlayers.strategicMove("Chase")
+                playerStrat = chasedPlayer.strategicMove("Chase")
 
                 chaseOutcome = np.random.binomial(1, probs[playerStrat])
 
                 if chaseOutcome == 1: # Escaped
-                    chasedPlayer.score += 10
+                    chasedPlayer.score += 30
                     break
                 else:  # Hit by killer
                     if not chasedPlayer.is_injured: # First hit -> continue chase
                         chasedPlayer.is_injured = True
+                        chasedPlayer.r = min(.9, chasedPlayer.r+.3)
                     else: 
                         i = random.randint(0,3)
                         self.hook_set[i][0] = chasedPlayer
@@ -161,6 +171,9 @@ class dbd:
             return ("Game Over!", None)
         
         self.num_rounds += 1
+        for survivor in self.free_survivors:
+            survivor.r = max(0.1,survivor.r-.1)
+
         return
             
 #------------------------------------------------------------
