@@ -1,12 +1,10 @@
 import numpy as np
 import random
 
+STRATEGIES = ["SELFLESS", "SELFISH", "TRUST" ,"RANDOM"]
 
-"""class player:
-    def __init__():"""
-#adding items medkit(1-self heal), toolbox, 
 class survivor:
-    num_survivors = 0
+    
     def __init__(self, player_name, player_strategy):
         """Defines Survivor strategy; selfless, selfish, trust, random, & adaptive*"""
         #self.survivor_num = num_survivors + 1
