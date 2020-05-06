@@ -3,15 +3,10 @@ import random
 
 STRATEGIES = ["SELFLESS", "SELFISH", "TRUST" ,"RANDOM"]
 
-<<<<<<< HEAD
-class survivor:
-    
-=======
 #adding items medkit(1-self heal), toolbox, 
 class survivor:
     STRATEGIES = ["SELFLESS", "SELFISH", "TRUST" ,"RANDOM"]
 
->>>>>>> cf9056bd6032c0a2d19658ee01c6cbacd756495a
     def __init__(self, player_name, player_strategy):
         """Defines Survivor strategy; selfless, selfish, trust, random, & adaptive*"""
         #self.survivor_num = num_survivors + 1
