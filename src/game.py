@@ -78,41 +78,50 @@ class dbd:
 
     def chase(self, players):
 
-        chasedPlayer = players[0]
+        chasedPlayers = list(players[0])
 
         if len(players) == 1:
             probs = {"Obstacle": 0.3, "Stun": 0.05, "Run": 0.2}
         else:
-            probs = {"Obstacle": 0.4, "Stun": 0.7, "Run": 0.3}
+            chasedPlayers.append(player[1])
+            probs_1 = {"Obstacle": 0.8, "Stun": 0.2, "Run": 0.5}
+            probs_2 = {"Obstacle": 0.3, "Stun": 0.9, "Run": 0.5}
+        for chasedPlayer in chasedPlayers:
+            i = 0
+            if i = 0:
+                probs = probs_1
+            if i = 1:
+                probs = probs_2
+            while(True):    
+                
+                playerStrat = chasedPlayers.strategicMove("Chase")
 
-        while(True):    
-            
-            playerStrat = chasedPlayer.strategicMove("Chase")
-            chaseOutcome = np.random.binomial(1, probs[playerStrat])
+                chaseOutcome = np.random.binomial(1, probs[playerStrat])
 
-            if chaseOutcome == 1: # Escaped
-                chasedPlayer.score += 10
-                return
-            else:  # Hit by killer
-                if not chasedPlayer.is_injured: # First hit -> continue chase
-                    chasedPlayer.is_injured = True
-                else: 
-                    i = random.randint(0,3)
-                    self.hook_set[i][0] = chasedPlayer
-                    self.free_survivors.remove(chasedPlayer)
-                    chasedPlayer.hooks += 1
-                    
-                    if chasedPlayer.hooks == 3:
-                        # KILL Player
-                        self.dead_survivors.append(chasedPlayer)
-                        self.hook_set[i][0] = 1
-                        self.survivors_alive -= 1
-                    else:    
-                        camping = np.random.binomial(1, self.killer.camp_p)
-                        if camping: 
-                            self.hook_set[i][1] = self.killer
-                            self.killer.busy = True
-                    return
+                if chaseOutcome == 1: # Escaped
+                    chasedPlayer.score += 10
+                    break
+                else:  # Hit by killer
+                    if not chasedPlayer.is_injured: # First hit -> continue chase
+                        chasedPlayer.is_injured = True
+                    else: 
+                        i = random.randint(0,3)
+                        self.hook_set[i][0] = chasedPlayer
+                        self.free_survivors.remove(chasedPlayer)
+                        chasedPlayer.hooks += 1
+                        
+                        if chasedPlayer.hooks == 3:
+                            # KILL Player
+                            self.dead_survivors.append(chasedPlayer)
+                            self.hook_set[i][0] = 1
+                            self.survivors_alive -= 1
+                        else:    
+                            camping = np.random.binomial(1, self.killer.camp_p)
+                            if camping: 
+                                self.hook_set[i][1] = self.killer
+                                self.killer.busy = True
+            i=1
+
 
 #------------------------------------------------------------
 

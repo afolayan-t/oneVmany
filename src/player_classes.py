@@ -3,8 +3,15 @@ import random
 
 STRATEGIES = ["SELFLESS", "SELFISH", "TRUST" ,"RANDOM"]
 
+<<<<<<< HEAD
 class survivor:
     
+=======
+#adding items medkit(1-self heal), toolbox, 
+class survivor:
+    STRATEGIES = ["SELFLESS", "SELFISH", "TRUST" ,"RANDOM"]
+
+>>>>>>> cf9056bd6032c0a2d19658ee01c6cbacd756495a
     def __init__(self, player_name, player_strategy):
         """Defines Survivor strategy; selfless, selfish, trust, random, & adaptive*"""
         #self.survivor_num = num_survivors + 1
@@ -15,14 +22,29 @@ class survivor:
         self.gens_completed = 0
         self.score = 0
         self.hooks = 0
-        
-        if player_strategy == "regular":
-            self.help_p = .5 #probability to help
-            self.r =.1
-            self.soloist = True #defines whether agent prefers to be alone or not
+        self.r = .1
 
-        #num_survivors += 1
+        if player_strategy == "STANDARD":
+            self.help_p = .5 #probability to help
+            self.STRATEGIES = {"Chased": [1/3, 1/3, 1/3], "Save": [1/2, 1/2], "Pop": [1/2, 1/2], "Help": [1/2, 1/2]}
+        
+        if player_strategy == "SELFLESS":
+            self.help_p = 1 #probability to help
+            self.STRATEGIES = {"Chased": [.1, .7, .2], "Save": [.95, 0.05], "Pop": [.8, .2], "Help": [1, 0]}
+
+        if player_strategy == "SELFLESS-LEANING":
+            self.help_p = .75 #probability to help
+            self.STRATEGIES = {"Chased": [.2, .5, .3], "Save": [.7, .3], "Pop": [.6, .4], "Help": [.7, .3]}
+        
+        if player_strategy == "SELFISH":
+            self.help_p = 0 #probability to help
+            self.STRATEGIES = {"Chased": [.7, .1, .2], "Save": [0.05, .95], "Pop": [.2, .8], "Help": [0, 1]}
+
+        if player_strategy == "SELFISH-LEANING":
+            self.help_p = .25 #probability to help
+            self.STRATEGIES = {"Chased": [.5, .2, .3], "Save": [.3, .7], "Pop": [.4, .6], "Help": [.3, .7]}
             
+
 
     def __repr__(self):
         print(self.player_name + " Strategy: " + self.player_strategy )
@@ -35,13 +57,13 @@ class survivor:
 
     def strategicMove(self, situation):
         if situation == "Chased":
-            return np.random.choice(["Run", "Obstacle", "Stun"],1, [1/3, 1/3, 1/3])[0]
+            return np.random.choice(["Run", "Obstacle", "Stun"],1, self.STRATEGIES["Chased"])[0]
         if situation == "Save":
-            return np.random.choice(["Rescue", "Leave"],1, [1/2, 1/2])[0]
+            return np.random.choice(["Rescue", "Leave"],1, self.STRATEGIES["Save"])[0]
         if situation == "Pop":
-            return np.random.choice(["Continue", "Leave"],1, [1/2, 1/2])[0]
+            return np.random.choice(["Continue", "Leave"],1, self.STRATEGIES["Pop"])[0]
         if situation == "Help":
-            return np.random.choice(["Heal", "Ignore"],1, [1/2, 1/2])[0]
+            return np.random.choice(["Heal", "Ignore"],1, self.STRATEGIES["Help"])[0]
         
 
 
