@@ -17,7 +17,7 @@ class survivor:
         self.score = 0
         self.hooks = 0
         self.r = .1
-        
+
         if player_strategy == "STANDARD":
             self.help_p = .5 #probability to help
             self.STRATEGIES = {"Chased": [1/3, 1/3, 1/3], "Save": [1/2, 1/2], "Pop": [1/2, 1/2], "Help": [1/2, 1/2]}
