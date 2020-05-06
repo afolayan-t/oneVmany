@@ -1,10 +1,6 @@
 import numpy as np
 import random
-<<<<<<< HEAD
 import * from player_classes.py
-=======
-from player_classes import *
->>>>>>> 2efed448e4a482850dc1d54adfb3355aeb8cd027
 
 class dbd:
     """Defines state of game"""
