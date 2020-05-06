@@ -1,14 +1,15 @@
 import numpy as np
 import random
 
-STRATEGIES = ["SELFLESS", "SELFISH", "TRUST" ,"RANDOM"]
+def column(matrix, i):
+    return [row[i] for row in matrix]
+
 
 #adding items medkit(1-self heal), toolbox, 
 class survivor:
-    STRATEGIES = ["SELFLESS", "SELFISH", "TRUST" ,"RANDOM"]
 
     def __init__(self, player_name, player_strategy):
-        """Defines Survivor strategy; selfless, selfish, trust, random, & adaptive*"""
+        """Defines Survivor strategy; selfless, selfish, selfless-leaning, selfish-leaning, and standard"""
         #self.survivor_num = num_survivors + 1
         self.player_name = player_name
         self.player_strategy = player_strategy
@@ -40,15 +41,19 @@ class survivor:
             self.STRATEGIES = {"Chased": [.5, .2, .3], "Save": [.3, .7], "Pop": [.4, .6], "Help": [.3, .7]}
             
 
-
+    '''
     def __repr__(self):
         print(self.player_name + " Strategy: " + self.player_strategy )
-        print("Score: " + self.score)
+        print("Score: " + str(self.score))
         print(self.score)
     
-    #def update_strategy(self, score, payoff):
-    #    """Takes current game state and defines next rounds strategy based on this"""
-    #    pass
+    
+    def __eq__(self, other):
+        if self.player_name == other.player_name:
+            return True
+        else: 
+            return False
+    '''
 
     def strategicMove(self, situation):
         if situation == "Chased":
@@ -66,7 +71,9 @@ class survivor:
     def request_help(self, game):
         """requests help from a particular survivor"""
 
-        for survivor in random.shuffle(game.free_survivors):
+        avail_players = game.free_survivors
+        random.shuffle(avail_players)
+        for survivor in avail_players:
             move = survivor.strategicMove("Help")
             if move == "Heal":
                 self.is_injured == False
@@ -75,8 +82,8 @@ class survivor:
 
 
 
-    def pick_gen(self, gen_set):
-        choice = random.choice(gen_set)
+    def pick_gen(self, avail_gens):
+        choice = random.choice(avail_gens)
         return choice
 
 
@@ -87,16 +94,21 @@ class survivor:
             self.request_help(game)
             if self.is_injured == False:
                 return ("Hide", self)
-        if all(s==0 for s in game.hook_set) !=True: # not empty
-            help_decision = np.random.binomial(1, help_p)
+        
+        if all( (s==0 or s==1) for s in column(game.hook_set, 0)) !=True: # not empty
+            help_decision = np.random.binomial(1, self.help_p)
             if help_decision == 1: #agrees to help
                 #pick survivor to help
-                hooked_survivors = [survivor for survivor in game.hook_set[:,0] if survivor != 0 and survivor != 1]
+                hooked_survivors = [survivor for survivor in column(game.hook_set, 0) if survivor != 0 and survivor != 1]
                 surv_choice = random.choice(hooked_survivors)
                 return ("Hooked", [self, surv_choice])
+        
         #pick generator
         if game.gens_fixed < 5:
-            available_gens = [i for i in range(7) if 0 in game.gen_set[i,:]] # gives list of generators with available spot
+            available_gens = [i for i in range(7) if 0 in game.gen_set[i]] # gives list of generators with available spot
+            #print("hello")
+            #print(game.gen_set)
+            #print(available_gens)
             return ("Fix Gen", self, self.pick_gen(available_gens))
         else:# nothing left to do
             return ("Hide", self)
@@ -124,16 +136,18 @@ class killer:
         else:
             #check generator
             choice = self.check_gen(gen_set)
-            picked_gen = gen_set[choice,:]
-            found_survivors = [surv for surv in picked_gen if surv != 0]
+            picked_gen = gen_set[choice]
+            found_survivors = [surv for surv in picked_gen if surv != 0 and surv != 1]
             if len(found_survivors) != 0:
                 if len(found_survivors) == 1:
                     return ("Chase", found_survivors)
                 else:
                     return ("Chase", found_survivors[:-1])
 
-        for survivor in random.shuffle(game.free_survivor):
+        avail_players = game.free_survivors
+        random.shuffle(avail_players)
+        for survivor in avail_players:
             search = np.random.binomial(1,survivor.r)
             if search == 1:
-                return ("Chase", survivor)
+                return ("Chase", [survivor] )
         return ("Nothing", None)
