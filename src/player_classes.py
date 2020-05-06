@@ -38,6 +38,11 @@ class survivor:
             return np.random.choice(["Run", "Obstacle", "Stun"],1, [1/3, 1/3, 1/3])[0]
         if situation == "Save":
             return np.random.choice(["Rescue", "Leave"],1, [1/2, 1/2])[0]
+        if situation == "Pop":
+            return np.random.choice(["Continue", "Leave"],1, [1/2, 1/2])[0]
+        if situation == "Help":
+            return np.random.choice(["Heal", "Ignore"],1, [1/2, 1/2])[0]
+        
 
 
 
@@ -48,7 +53,7 @@ class survivor:
 
     def pick_gen(self, gen_set):
         num_avail_gens = len(gen_set)
-        choice = random.int(0, num_avail_gens)
+        choice = random.randint(0, num_avail_gens)
         return choice
 
     def help(self, survivor):
@@ -86,7 +91,7 @@ class survivor:
 
 class killer:
 
-    def __init__(killer_strategy):
+    def __init__(self, killer_strategy):
         """Defines Killer"""
         self.busy = False
         self.camp_p = .5
@@ -104,11 +109,9 @@ class killer:
         """takes in game opject"""
         gen_set = game.gen_set
         if self.busy == True:
-            return "Nothing", self)
+            return ("Nothing", self)
         else:
             #check generator
             choice = self.check_gen(gen_set)
             picked_gen = gen_set[choice,:]
             found_survivors = [surv for surv in picked_gen if surv != 0]
-            
-
