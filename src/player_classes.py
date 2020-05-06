@@ -111,16 +111,12 @@ class killer:
         """takes in game opject"""
         gen_set = game.gen_set
         if self.busy == True:
-<<<<<<< HEAD
             return ("Nothing", None)
-=======
-            return ("Nothing", self)
->>>>>>> 2efed448e4a482850dc1d54adfb3355aeb8cd027
+
         else:
             #check generator
             choice = self.check_gen(gen_set)
             picked_gen = gen_set[choice,:]
-<<<<<<< HEAD
             found_survivors = [surv for surv in picked_gen if surv != 0]
             if len(found_survivors) != 0:
                 if len(found_survivors) == 1:
@@ -134,15 +130,3 @@ class killer:
                 return ("Chase", survivor)
         return ("Nothing", None)
         
-
-
-
-
-                    
-
-                    
-
-            
-=======
-            found_survivors = [surv for surv in picked_gen if surv != 0]
->>>>>>> 2efed448e4a482850dc1d54adfb3355aeb8cd027
