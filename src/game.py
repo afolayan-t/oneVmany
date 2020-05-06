@@ -141,7 +141,7 @@ class dbd:
             if player in workingOnGen:
                 scenario = ("Fix Gen", player, workingOnGen.index(player))
             else:           
-                scenario = player.nextMove()
+                scenario = player.nextMove(self)
 
             if scenario[0] == "Chase":
                 self.chase(scenario[1])

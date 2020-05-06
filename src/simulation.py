@@ -1,6 +1,6 @@
 import game
 import player_classes
-import matplotlib as plt
+import matplotlib.pyplot as plt
 
 playerHistory = [[] for x in range(4)]
 
@@ -13,7 +13,7 @@ ps = [p1, p2, p3, p4]
 K = player_classes.killer()
 
 # Play 1000 games
-for game_num in range(1000):
+for game_num in range(1):
     
     # Create new game and play through till the end
     game = game.dbd(K, ps)
@@ -21,9 +21,13 @@ for game_num in range(1000):
 
     # Save and reset player scores
     for i in range(len(ps)):
-        playerHistory[i].append(ps[i].score )
+        prevScore = playerHistory[i][-1]
+        newScore = ps[i].score
+        playerHistory[i].append( prevScore + newScore )
         ps[i].score = 0
+    
 
-
+plt.plot(playerHistory[0], playerHistory[1], playerHistory[2], playerHistory[3])
+plt.show()
 
 

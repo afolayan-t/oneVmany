@@ -141,13 +141,3 @@ class killer:
             if search == 1:
                 return ("Chase", survivor)
         return ("Nothing", None)
-        
-
-
-
-
-                    
-
-                    
-
-            
