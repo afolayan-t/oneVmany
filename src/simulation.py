@@ -21,8 +21,12 @@ for game_num in range(1000):
 
     # Save and reset player scores
     for i in range(len(ps)):
-        playerHistory[i].append(ps[i].score )
+        prevScore = playerHistory[i][-1]
+        newScore = ps[i].score
+        playerHistory[i].append( prevScore + newScore )
         ps[i].score = 0
+    
+    
 
 
 
