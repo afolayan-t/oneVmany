@@ -50,9 +50,8 @@ class survivor:
 
     def request_help(self, game):
         """requests help from a particular survivor"""
-        avail_survivors = random.shuffle(game.free_survivors)
 
-        for survivor in avail_survivors:
+        for survivor in random.shuffle(game.free_survivors):
             x = survivor.strategicMove("Help")
             if x == "Heal":
                 self.is_injured == False
@@ -72,19 +71,19 @@ class survivor:
         """Chooses whether to pick a generator to work on, or go and help a teammate"""
 
         if self.is_injured == True:
-            self.request_help()
+            self.request_help(game)
             if self.is_injured == False:
                 return ("Hide", self)
-        if all(s==0 for s in hook_set) !=True: # not empty
-            help_decision = np.random.binomial(1,help_p)
+        if all(s==0 for s in game.hook_set) !=True: # not empty
+            help_decision = np.random.binomial(1,self.help_p)
             if help_decision == 1: #agrees to help
                 #pick survivor to help
-                hooked_survivors = [survivor for survivor in hook_set[:,0] if survivor != 0]
+                hooked_survivors = [survivor for survivor in game.hook_set[:,0] if survivor != 0]
                 surv_choice = random.choice(hooked_survivors)
                 return ("Hooked", [self, surv_choice[0]])
         #pick generator
         if game.gens_fixed < 5:
-            available_gens = [gen for gen in gen_set if 0 in gen] # gives list of generators with available spot
+            available_gens = [gen for gen in game.gen_set if 0 in gen] # gives list of generators with available spot
             return ("Fix Gen", self, self.pick_gen(available_gens))
         else:# nothing left to do
             if game.gens_fixed < 5 & game.survivors_alive == 1:
@@ -96,7 +95,7 @@ class survivor:
 
 class killer:
 
-    def __init__(self, killer_strategy):
+    def __init__(self):
         """Defines Killer"""
         self.busy = False
         self.camp_p = .5
@@ -112,7 +111,6 @@ class killer:
         gen_set = game.gen_set
         if self.busy == True:
             return ("Nothing", None)
-
         else:
             #check generator
             choice = self.check_gen(gen_set)
