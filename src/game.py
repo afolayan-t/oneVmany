@@ -61,17 +61,17 @@ class dbd:
 
         if self.gen_vals[choice] == 3:
             self.gens_fixed += 1
-            for i in range(len(self.gen_set[choice,:])):
-                 self.gen_set[choice][i] = 1
+            p=self.gen_set[choice,:]
+            for i in range(len(p)):
                 if p[i]!=0:
                     p.score+=10
-            
+                self.gen_set[choice][i] = 1
 
 #------------------------------------------------------------
 
     def hooked(self, players):
         pos = self.hook_set[:,0].index(players[1])
-        killerCamping =  (self.hook_set[pos][1] != 0)
+        killerCamping =  (self.hook_set[pos][1] not in [0,1])
         
         decision = players[0].strategicMove("Save")
         if not killerCamping or decision == "Rescue":
@@ -79,8 +79,11 @@ class dbd:
             self.free_survivors.append(players[1])
             players[0].score += 25
             players[0].r = min(.9, players[0].r + .3)
+            
         else: return
 
+        self.killer.busy = False
+        self.hook_set[pos][1] = 0
         return self.chase(players)
 
 #------------------------------------------------------------
@@ -96,10 +99,10 @@ class dbd:
             probs_1 = {"Obstacle": 0.8, "Stun": 0.2, "Run": 0.5}
             probs_2 = {"Obstacle": 0.3, "Stun": 0.9, "Run": 0.5}
         for chasedPlayer in chasedPlayers:
-            i = 0
-            if i = 0:
+            turn = 0
+            if turn = 0:
                 probs = probs_1
-            if i = 1:
+            if turn = 1:
                 probs = probs_2
             while(True):    
                 
@@ -124,13 +127,14 @@ class dbd:
                             # KILL Player
                             self.dead_survivors.append(chasedPlayer)
                             self.hook_set[i][0] = 1
+                            self.hook_set[i][1] = 1
                             self.survivors_alive -= 1
                         else:    
                             camping = np.random.binomial(1, self.killer.camp_p)
                             if camping: 
                                 self.hook_set[i][1] = self.killer
                                 self.killer.busy = True
-            i=1
+            turn=1
 
 
 #------------------------------------------------------------
@@ -139,7 +143,7 @@ class dbd:
     def run_round(self):
         ''' Runs a single round of the game'''
 
-        workingOnGen = self.gen_set[:,0]
+        workingOnGen = self.gen_set[:,0].append(self.gen_set[:,1]).append(self.gen_set[:,2])
 
         # Killers and free survivors take turns to play in a random order
         for player in random.shuffle(self.free_survivors.append(self.killer)):
@@ -149,7 +153,7 @@ class dbd:
                 if TrapDoorFound: return ("Players won", player)
 
             if player in workingOnGen:
-                scenario = ("Fix Gen", player, workingOnGen.index(player))
+                scenario = ("Fix Gen", player, workingOnGen.index(player) % 7)
             else:           
                 scenario = player.nextMove(self)
 
@@ -174,7 +178,7 @@ class dbd:
         for survivor in self.free_survivors:
             survivor.r = max(0.1,survivor.r-.1)
 
-        return
+        return None
             
 #------------------------------------------------------------
 
