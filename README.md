@@ -9,9 +9,15 @@
 
 Our code consists of three python files,
 
-       - Esc: cancel prediction
-       - s: take static image for (a-y) prediction not including J
-       - d: take recording until d hit again, captures dynamic sign and predicts either J or Z
+       - player_classses: Consists of the Survivor and Killer object classes
+       - game: Consists of the DBD game object class
+       - simulation: Runs many simulations of the DBD game on different player strategies and records data to be analyzed
+       
+ To run the games, you just need to run the simulation file with python3,
+ 
+ ```
+ $ python3 simulation.py
+ ```
 
 
 _**The ASL recognition class**_
