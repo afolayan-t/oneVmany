@@ -15,7 +15,7 @@ class dbd:
         self.trap_door_open = False 
 
         self.num_rounds = 0
-        self.survivors = [survivors[0], survivors[1], survivors[2], survivors[3]]
+        self.players = [survivors[0], survivors[1], survivors[2], survivors[3]]
         self.free_survivors = survivors
         self.dead_survivors = []
         self.killer = killer
@@ -173,7 +173,7 @@ class dbd:
             
             if self.survivors_alive == 1 and player != self.killer:
                 TrapDoorFound = self.lookForTrapDoor(player)
-                if TrapDoorFound: return ("Players won", [player])
+                if TrapDoorFound: return ("Trap Door Found!", [player])
 
             if player in workingOnGen:
                 scenario = ("Fix Gen", player, workingOnGen.index(player) % 7)
@@ -191,7 +191,7 @@ class dbd:
 
         if self.gens_fixed == 5:
             doorOpen = (self.canEscape == 0)
-            if doorOpen: return ("Players Won", self.free_survivors)
+            if doorOpen: return ("Escaped Door!", self.free_survivors)
             else: self.canEscape -= 1
 
         if self.survivors_alive == 0:
@@ -212,9 +212,9 @@ class dbd:
         while Outcome == None:
             Outcome = self.run_round()
             if self.num_rounds == 100: 
-                return True
+                return None
         self.payoff(Outcome)
-        return False
+        return Outcome
             
 
 #------------------------------------------------------------
@@ -222,7 +222,6 @@ class dbd:
 
     def payoff(self, Outcome):
         ''' Takes list of survivors alive and rewards everyone accordingly '''
-        print(Outcome[0])
         if Outcome[0] == "Game Over!":
             return
         else:

@@ -40,6 +40,12 @@ class survivor:
             self.help_p = .25 #probability to help
             self.STRATEGIES = {"Chased": [.5, .2, .3], "Save": [.3, .7], "Pop": [.4, .6], "Help": [.3, .7]}
             
+    def reset(self):
+        self.is_injured = False 
+        self.gens_completed = 0
+        self.score = 0
+        self.hooks = 0
+        self.r = .1
 
     '''
     def __repr__(self):
