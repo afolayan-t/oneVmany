@@ -23,7 +23,7 @@ Our code consists of three python files,
  $ python3 simulation.py
  ```
  
- This will cause the script to start printing game information regarding what kind of players are playing the current game, and what was the final outcome was. Data regarding the different strategies' scores and number of wins is recorded across all games and plotted. 
+ This will cause the script to start printing game information regarding what kind of players are playing the current game, and what the final outcome was. Data regarding the different strategies' scores and number of wins is recorded across all games and plotted. 
  
  Note the code for the plots is only in the DBD.ipynb (jupyter notebook) file as it tends to display plots more elegantly than just running the code through terminal. 
 
