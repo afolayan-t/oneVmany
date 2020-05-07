@@ -1,6 +1,7 @@
 import game
 import random
 import player_classes
+import itertools
 import matplotlib.pyplot as plt
 
 
@@ -10,46 +11,40 @@ STRATEGIES = ["SELFLESS", "SELFISH", "SELFLESS-LEANING", "SELFISH-LEANING", "STA
 stratScores = {"SELFLESS":[], "SELFISH":[], "SELFLESS-LEANING":[], "SELFISH-LEANING":[], "STANDARD":[]}
 stratNumEscapes = {"SELFLESS":0, "SELFISH":0, "SELFLESS-LEANING":0, "SELFISH-LEANING":0, "STANDARD":0}
 
+def allPlayerSets(n, seq):
+    set = []
+    for p in itertools.product(seq, repeat=n):
+        if sum(p) == 4:
+            set.append(p)
+    return set
 
 # Defines how players for each strtagey we will have for a particular game
-playerSET = [[4, 0, 0, 0, 0],    # i.e. 4 SELFLESS players
-             [0, 4, 0, 0, 0],
-             [0, 0, 4, 0, 0],
-             [0, 0, 0, 4, 0],
-             [0, 0, 0, 0, 4],
-             [1, 1, 1, 1, 1],   # One of them sits out each round
-             [3, 1, 0, 0, 0],
-             [1, 3, 0, 0, 0],
-             [0, 0, 1, 3, 0],
-             [0, 0, 3, 1, 0],
-             [2, 2, 0, 0, 0],
-             [0, 0, 2, 2, 0]]
+playerSET = allPlayerSets(5, [0,1,2,3, 4])
+playerSET.append((1,1,1,1,1))
+
 
 TotalGamesPlayed = 0
 print("Begin Games")
-for playerDist in playerSET:
+for game_num in range(100):
     
     print("================================================")
-    # Initialize players
-    ps = []
-    playerNum = 1
-    whosPlaying = "Players playing "
-    for i in range(len(playerDist)):
-        for j in range(playerDist[i]):
-            playerName = "P" + str(playerNum)
-            playerStrategy = STRATEGIES[i]
-            ps.append(player_classes.survivor(playerName, playerStrategy))
-            playerNum += 1
-            whosPlaying += playerName + ":" + playerStrategy + " "
+    for playerDist in playerSET:
+        
+        # Initialize players
+        ps = []
+        playerNum = 1
+        whosPlaying = "Players playing "
+        for i in range(len(playerDist)):
+            for j in range(playerDist[i]):
+                playerName = "P" + str(playerNum)
+                playerStrategy = STRATEGIES[i]
+                ps.append(player_classes.survivor(playerName, playerStrategy))
+                playerNum += 1
+                whosPlaying += playerName + ":" + playerStrategy + " "
 
-    print(whosPlaying)
-    print("----------------------------------------")
-    #exit()
+        print(whosPlaying)
 
-    K = player_classes.killer()
-
-    # Play 100 games of each player set
-    for game_num in range(100):
+        K = player_classes.killer()
 
         # If all strategies playing (5), make one sit out each game 
         if len(ps) > 4:
@@ -76,21 +71,20 @@ for playerDist in playerSET:
             final += " Escaped!"
 
         print(final)
-    
+
         # Save scores and reset all players
         for p in match.players:
             stratScores[p.player_strategy].append(p.score)
             p.reset()
         
         TotalGamesPlayed +=1
+        print("----------------------------------------")
 
         
 
 print(stratNumEscapes)
 print(stratScores)
 
-
-#plt.plot(playerHistory[0], playerHistory[1], playerHistory[2], playerHistory[3])
-#plt.show()
+# Plots done in the jupyter notebook
 
 

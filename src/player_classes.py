@@ -47,19 +47,6 @@ class survivor:
         self.hooks = 0
         self.r = .1
 
-    '''
-    def __repr__(self):
-        print(self.player_name + " Strategy: " + self.player_strategy )
-        print("Score: " + str(self.score))
-        print(self.score)
-    
-    
-    def __eq__(self, other):
-        if self.player_name == other.player_name:
-            return True
-        else: 
-            return False
-    '''
 
     def strategicMove(self, situation):
         if situation == "Chased":
@@ -112,9 +99,6 @@ class survivor:
         #pick generator
         if game.gens_fixed < 5:
             available_gens = [i for i in range(7) if 0 in game.gen_set[i]] # gives list of generators with available spot
-            #print("hello")
-            #print(game.gen_set)
-            #print(available_gens)
             return ("Fix Gen", self, self.pick_gen(available_gens))
         else:# nothing left to do
             return ("Hide", self)
