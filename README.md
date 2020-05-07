@@ -1,20 +1,11 @@
-# oneVmany
+# Best Strategies in repeated oneVmany games: Dead by Daylight
 
-
-
-To run with pretrained model data, download the files in the link and place them in the same directory as the python or jupyter file: 
-
-https://drive.google.com/drive/folders/1rOtbhmVBv6_wRUTcFAjDEoRkN9Muk7VM?usp=sharing
-
-We obtained the data from the following kaggle site:
-
-https://www.kaggle.com/grassknoted/asl-alphabet
 
 ## Abstract
 
 An ASL alphabet recognition system that uses a convolutional neural network to recognize static gestures of the alphabet and computer vision to recognize dynamic gestures of the alphabet.
 
-## Using the code
+## Running the code
 
 _**The ASL recognition class**_
 
