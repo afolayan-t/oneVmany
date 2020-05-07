@@ -1,4 +1,4 @@
-# Best Strategies in repeated oneVmany games: Dead by Daylight
+# Best Strategies in Repeated One Vs. Many games: Dead by Daylight
 
 
 ## Abstract
